@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Тренажер Таблиці Множення</title>
+    <link rel="icon" href="img/icon-graduation.png" type="icon-graduation">
+    <link rel="apple-touch-icon" sizes="57x57" href="img/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="img/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="img/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="img/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="img/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="img/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="img/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="img/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="manifest" href="img/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="img/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            background-image: url('img/fon.webp');
+            background-size: 90%;
+            background-size: 100% 100%;
+            /* Розтягує картинку по всій ширині та висоті */
+            /* Зменшує картинку на 10% */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+
+
+
+        .content {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            margin-top: 50px;
+            max-height: 70vh;
+            overflow-y: auto;
+            position: relative;
+            /* Потрібно для абсолютного позиціонування зображень */
+        }
+
+        .corner-image {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+        }
+
+        .top-left {
+            top: 0;
+            left: 0;
+        }
+
+        .top-right {
+            top: 0;
+            right: 0;
+        }
+
+        .bottom-left {
+            bottom: 0;
+            left: 0;
+        }
+
+        .bottom-right {
+            bottom: 0;
+            right: 0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            position: relative;
+            top: 70px;
+        }
+
+        .settings {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .settings label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        #question,
+        #result,
+        #hint,
+        #progress,
+        #timer,
+        #question-timer {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        #answer {
+            padding: 5px;
+            font-size: 18px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 10px;
+        }
+
+        #progress-bar {
+            width: 80%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px auto;
+            height: 20px;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0;
+        }
+
+        #results-table {
+            margin-top: 20px;
+            width: 80%;
+            border-collapse: collapse;
+            margin: auto;
+        }
+
+        #results-table th,
+        #results-table td {
+            border: 1px solid #000000;
+            padding: 8px;
+            text-align: center;
+        }
+
+        #results-table th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        h1 {
+            position: relative;
+            top: 40px;
+            /* Встановіть бажане значення */
+            color: white;
+            /* Додає білий колір тексту */
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Тренажер Таблиці Множення</h1>
+    <div class="content">
+        <!-- Додаємо зображення у кути -->
+        <img src="img/corner-top-left.png" class="corner-image top-left" alt="Top Left Corner">
+        <img src="img/corner-top-right.png" class="corner-image top-right" alt="Top Right Corner">
+        <img src="img/corner-bottom-left.png" class="corner-image bottom-left" alt="Bottom Left Corner">
+        <img src="img/corner-bottom-right.png" class="corner-image bottom-right" alt="Bottom Right Corner">
+
+        <div class="sticker"></div>
+        <div id="timer">Час: 0 секунд</div>
+        <div id="question-timer">Час на питання: 0 секунд</div>
+        <div id="question">Натисніть "Почати", щоб почати тренування!</div>
+
+        <div class="settings">
+            <label for="total-questions">Кількість питань:</label>
+            <input type="number" id="total-questions" placeholder="Кількість питань" min="1" max="20" />
+
+            <label for="difficulty">Вибір рівня складності:</label>
+            <select id="difficulty">
+                <option value="10">Легкий (до 10)</option>
+                <option value="20">Середній (до 20)</option>
+                <option value="50">Важкий (до 50)</option>
+            </select>
+
+            <label for="answer">Ваша відповідь:</label>
+            <input type="number" id="answer" placeholder="Ваша відповідь" />
+        </div>
+
+        <button onclick="submitAnswer()">Відповісти</button>
+        <button onclick="startTraining()">Почати</button>
+
+        <div id="hint"></div>
+        <div id="result"></div>
+        <div id="progress-bar">
+            <div id="progress-fill"></div>
+        </div>
+        <div id="progress"></div>
+
+        <table id="results-table">
+            <thead>
+                <tr>
+                    <th>Номер</th>
+                    <th>Правильні відповіді</th>
+                    <th>Всього питань</th>
+                    <th>Точність</th>
+                    <th>Час</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Результати будуть додані тут -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let num1, num2, correctAnswer;
+        let totalQuestions = 10;
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let timerInterval;
+        let questionTimerInterval;
+        let timeElapsed = 0;
+        let questionTimeElapsed = 0;
+
+        function generateQuestion() {
+            let maxDifficulty = parseInt(document.getElementById('difficulty').value);
+            num1 = Math.floor(Math.random() * maxDifficulty) + 1;
+            num2 = Math.floor(Math.random() * maxDifficulty) + 1;
+            correctAnswer = num1 * num2;
+            document.getElementById('question').textContent = `Скільки буде ${num1} × ${num2}?`;
+            document.getElementById('hint').textContent = "";
+
+            questionTimeElapsed = 0;
+            clearInterval(questionTimerInterval);
+            questionTimerInterval = setInterval(updateQuestionTimer, 1000);
+        }
+
+        function startTraining() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            timeElapsed = 0;
+            document.getElementById('result').textContent = "";
+            document.getElementById('progress').textContent = `Питання ${currentQuestion} з ${totalQuestions}`;
+            document.getElementById('progress-fill').style.width = "0%";
+            document.getElementById('timer').textContent = "Час: 0 секунд";
+            document.getElementById('question-timer').textContent = "Час на питання: 0 секунд";
+            clearInterval(timerInterval);
+            clearInterval(questionTimerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            totalQuestions = parseInt(document.getElementById('total-questions').value) || 10;
+            generateQuestion();
+        }
+
+        function updateTimer() {
+            timeElapsed++;
+            document.getElementById('timer').textContent = `Час: ${timeElapsed} секунд`;
+        }
+
+        function updateQuestionTimer() {
+            questionTimeElapsed++;
+            document.getElementById('question-timer').textContent = `Час на питання: ${questionTimeElapsed} секунд`;
+        }
+
+        function submitAnswer() {
+            let userAnswer = parseInt(document.getElementById('answer').value);
+
+            if (!isNaN(userAnswer)) {
+                currentQuestion++;
+                clearInterval(questionTimerInterval);
+                if (userAnswer === correctAnswer) {
+                    correctAnswers++;
+                    document.getElementById('hint').textContent = "Відмінно! Ви відповіли правильно.";
+                } else {
+                    document.getElementById('hint').textContent = `Неправильно. Правильна відповідь: ${correctAnswer}. 
+                    Спробуйте пам'ятати, що ${num1} - це близько до ${Math.floor(num1 / 10) * 10}, отже можете додати ${num1} до себе ${num2} разів.`;
+                }
+
+                document.getElementById('answer').value = "";
+                updateProgress();
+
+                if (currentQuestion < totalQuestions) {
+                    generateQuestion();
+                } else {
+                    endTraining();
+                }
+            } else {
+                alert("Будь ласка, введіть число.");
+            }
+        }
+
+        function updateProgress() {
+            let progressPercentage = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progress-fill').style.width = progressPercentage + "%";
+            document.getElementById('progress').textContent = `Питання ${currentQuestion} з ${totalQuestions}`;
+        }
+
+        function endTraining() {
+            clearInterval(timerInterval);
+            clearInterval(questionTimerInterval);
+            let score = (correctAnswers / totalQuestions) * 100;
+
+            document.getElementById('result').textContent = `Ви відповіли правильно на ${correctAnswers} з ${totalQuestions} питань. Точність: ${score.toFixed(2)}%. Час: ${timeElapsed} секунд`;
+
+            let resultsTable = document.getElementById('results-table').getElementsByTagName('tbody')[0];
+            let newRow = resultsTable.insertRow();
+            newRow.insertCell(0).textContent = resultsTable.rows.length;
+            newRow.insertCell(1).textContent = correctAnswers;
+            newRow.insertCell(2).textContent = totalQuestions;
+            newRow.insertCell(3).textContent = score.toFixed(2) + "%";
+            newRow.insertCell(4).textContent = timeElapsed + " секунд";
+        }
+    </script>
+</body>
+
+</html>
